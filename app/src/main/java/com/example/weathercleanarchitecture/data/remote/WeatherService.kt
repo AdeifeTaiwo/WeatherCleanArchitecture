@@ -9,9 +9,9 @@ interface WeatherService {
     @GET("current")
     suspend fun getCurrentCityWeather(
         @Query("lat") lat: Double,
-        @Query("long") long: Double,
-        @Query("key") key: String = API_KEY,
-        @Query("include") include: String = "Minutely"
+        @Query("lon") long: Double,
+        @Query("key") key: String,
+        @Query("include") include: String
     ): WeatherResponse
 
 

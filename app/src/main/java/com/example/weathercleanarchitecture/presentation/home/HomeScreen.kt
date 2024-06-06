@@ -1,5 +1,6 @@
 package com.example.weathercleanarchitecture.presentation.home
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +42,10 @@ fun HomeScreen(
     val uiState = viewModel.uiState.value
     var getLocation by remember { mutableStateOf(false) }
     var address by remember {
-        mutableStateOf("fetching...")
+        mutableStateOf("")
+    }
+    var showToast by remember {
+        mutableStateOf(false)
     }
     val context = LocalContext.current;
 
@@ -58,7 +62,10 @@ fun HomeScreen(
         context
     )
 
-
+    if (showToast){
+        Toast.makeText(context, "Fetching location", Toast.LENGTH_SHORT).show()
+        showToast = false
+    }
 
     Box(
         modifier = Modifier
@@ -102,7 +109,7 @@ fun HomeScreen(
                 AppSearchBar(
                     modifier = Modifier.weight(0.7f),
                     text = address,
-                    hintText = "Fetching...",
+                    hintText = "Fetching location...",
                     onSearch = { },
                     onValueChange = {
 
@@ -126,7 +133,11 @@ fun HomeScreen(
                     modifier = Modifier.weight(0.8f),
                     enabled = true
                 ) {
-                    navigateToWeatherDetails(latLng.latitude, latLng.longitude)
+                    if(address.isNotEmpty()) {
+                        navigateToWeatherDetails(latLng.latitude, latLng.longitude)
+                    }else {
+                        showToast = true
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(60.dp))

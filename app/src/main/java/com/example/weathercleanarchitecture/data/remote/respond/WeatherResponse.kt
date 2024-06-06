@@ -41,7 +41,7 @@ data class WeatherDataItem(
 	val lon: Any? = null,
 
 	@field:SerializedName("clouds")
-	val clouds: Int? = null,
+	val clouds: Double? = null,
 
 	@field:SerializedName("wind_spd")
 	val windSpd: Any? = null,
@@ -56,7 +56,7 @@ data class WeatherDataItem(
 	val hAngle: Any? = null,
 
 	@field:SerializedName("precip")
-	val precip: Int? = null,
+	val precip: Double? = null,
 
 	@field:SerializedName("station")
 	val station: String? = null,
@@ -77,7 +77,7 @@ data class WeatherDataItem(
 	val uv: Any? = null,
 
 	@field:SerializedName("vis")
-	val vis: Int? = null,
+	val vis: Double? = null,
 
 	@field:SerializedName("temp")
 	val temp: Any? = null,
@@ -98,25 +98,25 @@ data class WeatherDataItem(
 	val windDir: Int? = null,
 
 	@field:SerializedName("solar_rad")
-	val solarRad: Int? = null,
+	val solarRad: Double? = null,
 
 	@field:SerializedName("country_code")
 	val countryCode: String? = null,
 
 	@field:SerializedName("rh")
-	val rh: Int? = null,
+	val rh: Double? = null,
 
 	@field:SerializedName("slp")
-	val slp: Int? = null,
+	val slp: Double? = null,
 
 	@field:SerializedName("snow")
-	val snow: Int? = null,
+	val snow: Double? = null,
 
 	@field:SerializedName("sunset")
 	val sunset: String? = null,
 
 	@field:SerializedName("aqi")
-	val aqi: Int? = null,
+	val aqi: Double? = null,
 
 	@field:SerializedName("state_code")
 	val stateCode: String? = null,
@@ -128,13 +128,13 @@ data class WeatherDataItem(
 	val gust: Any? = null,
 
 	@field:SerializedName("ts")
-	val ts: Int? = null
+	val ts: Double? = null
 )
 
 data class Weather(
 
 	@field:SerializedName("code")
-	val code: Int? = null,
+	val code: Double? = null,
 
 	@field:SerializedName("icon")
 	val icon: String? = null,
@@ -149,7 +149,7 @@ data class MinutelyItem(
 	val temp: Any? = null,
 
 	@field:SerializedName("precip")
-	val precip: Int? = null,
+	val precip: Double? = null,
 
 	@field:SerializedName("timestamp_local")
 	val timestampLocal: String? = null,
@@ -158,8 +158,8 @@ data class MinutelyItem(
 	val timestampUtc: String? = null,
 
 	@field:SerializedName("snow")
-	val snow: Int? = null,
+	val snow: Double? = null,
 
 	@field:SerializedName("ts")
-	val ts: Int? = null
+	val ts: Double? = null
 )

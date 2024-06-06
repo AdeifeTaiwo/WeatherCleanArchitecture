@@ -57,10 +57,12 @@ fun WeatherCleanAppNavHost(
             val long =
                 navController.previousBackStackEntry?.savedStateHandle?.get<Double>("long")
 
-            WeatherDetailsScreen(
-                lat,
-                long
+            val viewModel: WeatherDetailsViewModel = hiltViewModel()
+            viewModel.getCurrentCityWeather(
+                latitude = lat ?: -28.00,
+                longitude = long ?: 100.91
             )
+            WeatherDetailsScreen()
         }
 
     }

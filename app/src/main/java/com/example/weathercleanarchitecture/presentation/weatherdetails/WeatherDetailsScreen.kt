@@ -43,16 +43,8 @@ import com.example.weathercleanarchitecture.R
 
 @Composable
 fun WeatherDetailsScreen(
-    lat: Double,
-    long: Double
+    viewModel: WeatherDetailsViewModel = hiltViewModel()
 ) {
-
-
-    val viewModel: WeatherDetailsViewModel = hiltViewModel()
-    viewModel.getCurrentCityWeather(
-        latitude = lat ?: -28.00,
-        longitude = long ?: 100.91
-    )
 
     val weatherDetailState = viewModel.movieListState.collectAsState().value
 
@@ -111,7 +103,9 @@ fun WeatherDetailsScreen(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "",
                 )
-
+                val city = weatherDetailState?.weatherData?.data?.get(0)?.cityName
+                val temperatureText =  weatherDetailState?.weatherData?.data?.get(0)?.appTemp
+                val humidity =  weatherDetailState?.weatherData?.data?.get(0)?.windSpd
                 //city name
                 Text(
                     modifier = Modifier
@@ -122,7 +116,7 @@ fun WeatherDetailsScreen(
                             top.linkTo(backButton.bottom)
                         }
                         .padding(start = 16.dp, bottom = 16.dp, top = 40.dp),
-                    text = "Berlin, Germany",
+                    text = "$city",
                     style = TextStyle(
                         color = Color.Black,
                         fontWeight = FontWeight.ExtraBold,
@@ -139,7 +133,7 @@ fun WeatherDetailsScreen(
                             top.linkTo(cityName.bottom)
                         }
                         .padding(start = 16.dp, bottom = 16.dp, top = 40.dp),
-                    text = "13",
+                    text = "$temperatureText",
                     style = TextStyle(
                         color = Color.Black,
                         fontWeight = FontWeight.ExtraBold,
@@ -155,13 +149,14 @@ fun WeatherDetailsScreen(
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                val humidity =  weatherDetailState?.weatherData?.data?.get(0)?.windSpd
                 RoundContainerWithText(
                     backgroundColor = Color(0XFF658ED9), drawable = R.drawable.rain, text = "90"
                 )
                 RoundContainerWithText(
                     backgroundColor = Color(0XFFD86191),
                     drawable = R.drawable.ic_humidity,
-                    text = "90"
+                    text = "$humidity km/h"
                 )
                 RoundContainerWithText(
                     backgroundColor = Color(0XFF5E4FC1), drawable = R.drawable.ic_wind, text = "90"
@@ -309,7 +304,7 @@ fun RoundContainerWithText(
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = "$text %", style = TextStyle(
+            text = "$text", style = TextStyle(
                 color = backgroundColor
             )
         )

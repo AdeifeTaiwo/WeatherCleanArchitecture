@@ -1,6 +1,7 @@
 package com.example.weathercleanarchitecture.data.repository
 
 import com.example.weathercleanarchitecture.data.remote.WeatherService
+import com.example.weathercleanarchitecture.data.remote.WeatherService.Companion.API_KEY
 import com.example.weathercleanarchitecture.data.remote.respond.WeatherResponse
 import com.example.weathercleanarchitecture.domain.repository.WeatherRepository
 import com.example.weathercleanarchitecture.utility.Resource
@@ -22,7 +23,8 @@ class WeatherRepositoryImpl @Inject constructor(
         return flow {
             emit(Resource.Loading(true))
             val weatherFromRemote = try {
-                weatherService.getCurrentCityWeather(latitude, longitude)
+                weatherService.getCurrentCityWeather(latitude, longitude, key = API_KEY,
+                    include = "minutely")
             } catch (e: HttpException) {
                 e.printStackTrace()
                 emit(Resource.Error(message = "Please Check your internet"))
