@@ -103,9 +103,9 @@ fun WeatherDetailsScreen(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "",
                 )
-                val city = weatherDetailState?.weatherData?.data?.get(0)?.cityName
-                val temperatureText =  weatherDetailState?.weatherData?.data?.get(0)?.appTemp
-                val humidity =  weatherDetailState?.weatherData?.data?.get(0)?.windSpd
+                val city = weatherDetailState.weatherData?.data?.get(0)?.cityName?:""
+                val temperatureText =  weatherDetailState.weatherData?.data?.get(0)?.appTemp?:""
+                val humidity =  weatherDetailState.weatherData?.data?.get(0)?.windSpd?:""
                 //city name
                 Text(
                     modifier = Modifier
@@ -116,7 +116,7 @@ fun WeatherDetailsScreen(
                             top.linkTo(backButton.bottom)
                         }
                         .padding(start = 16.dp, bottom = 16.dp, top = 40.dp),
-                    text = "$city",
+                    text = city,
                     style = TextStyle(
                         color = Color.Black,
                         fontWeight = FontWeight.ExtraBold,
@@ -149,7 +149,7 @@ fun WeatherDetailsScreen(
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val humidity =  weatherDetailState?.weatherData?.data?.get(0)?.windSpd
+                val humidity =  weatherDetailState?.weatherData?.data?.get(0)?.windSpd?:""
                 RoundContainerWithText(
                     backgroundColor = Color(0XFF658ED9), drawable = R.drawable.rain, text = "90"
                 )

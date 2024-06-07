@@ -79,24 +79,24 @@ fun getUserLocation(context: Context = LocalContext.current): Flow<Resource<Lata
             }
 
 
-            /**
-             * Option 2
-             * This option returns the most recent historical location currently available.
-             * Will return null if no historical location is available
-             * */
-            locationProvider.lastLocation
-                .addOnSuccessListener { location ->
-                    location?.let {
-                        val lat = location.latitude
-                        val long = location.longitude
-                        // Update data class with location data
-                        _currentUserLocation.value =
-                            Resource.Success(LatandLong(latitude = lat, longitude = long))
-                    }
-                }
-                .addOnFailureListener {
-                    Log.e("Location_error", "${it.message}")
-                }
+//            /**
+//             * Option 2
+//             * This option returns the most recent historical location currently available.
+//             * Will return null if no historical location is available
+//             * */
+//            locationProvider.lastLocation
+//                .addOnSuccessListener { location ->
+//                    location?.let {
+//                        val lat = location.latitude
+//                        val long = location.longitude
+//                        // Update data class with location data
+//                        _currentUserLocation.value =
+//                            Resource.Success(LatandLong(latitude = lat, longitude = long))
+//                    }
+//                }
+//                .addOnFailureListener {
+//                    Log.e("Location_error", "${it.message}")
+//                }
 
         }
     }
