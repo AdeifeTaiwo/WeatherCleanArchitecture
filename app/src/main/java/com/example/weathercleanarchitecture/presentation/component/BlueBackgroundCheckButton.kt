@@ -15,6 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weathercleanarchitecture.ui.theme.blueBtnColor
+import com.example.weathercleanarchitecture.ui.theme.transparentGrey
 
 
 @Composable
@@ -36,8 +37,8 @@ fun BlueBackgroundCheckButton(
         enabled = enabled,
         shape = RoundedCornerShape(32.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (enabled) blueBtnColor else blueBtnColor,
-            disabledContainerColor = blueBtnColor
+            containerColor = if (enabled) blueBtnColor else transparentGrey,
+            disabledContainerColor = transparentGrey
         ),
         border = BorderStroke(1.dp, color = Color.Transparent)
     ) {

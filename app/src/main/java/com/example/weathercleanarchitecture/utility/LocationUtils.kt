@@ -9,10 +9,8 @@ import android.os.Looper
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -23,6 +21,9 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.io.IOException
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -39,14 +40,18 @@ lateinit var locationProvider: FusedLocationProviderClient
 
 @SuppressLint("MissingPermission")
 @Composable
-fun getUserLocation(context: Context = LocalContext.current): LatandLong {
+fun getUserLocation(context: Context = LocalContext.current): Flow<Resource<LatandLong>> {
 
     // The Fused Location Provider provides access to location APIs.
     locationProvider = LocationServices.getFusedLocationProviderClient(context)
 
-    var currentUserLocation by remember { mutableStateOf(LatandLong()) }
+    //var currentUserLocation by remember { mutableStateOf(LatandLong()) }
 
-    var requestLocation = remember { mutableStateOf(false) }
+    val _currentUserLocation: MutableStateFlow<Resource<LatandLong>> =
+        MutableStateFlow(Resource.Loading(true))
+    val currentUserLocation = _currentUserLocation.asStateFlow()
+
+    val requestLocation = remember { mutableStateOf(false) }
 
 
     if (requestLocation.value) {
@@ -68,7 +73,8 @@ fun getUserLocation(context: Context = LocalContext.current): LatandLong {
              * */
             for (location in result.locations) {
                 // Update data class with location data
-                currentUserLocation = LatandLong(location.latitude, location.longitude)
+                _currentUserLocation.value =
+                    Resource.Success(LatandLong(location.latitude, location.longitude))
                 Log.d("LOCATION_TAG,", "${location.latitude},${location.longitude}")
             }
 
@@ -84,7 +90,8 @@ fun getUserLocation(context: Context = LocalContext.current): LatandLong {
                         val lat = location.latitude
                         val long = location.longitude
                         // Update data class with location data
-                        currentUserLocation = LatandLong(latitude = lat, longitude = long)
+                        _currentUserLocation.value =
+                            Resource.Success(LatandLong(latitude = lat, longitude = long))
                     }
                 }
                 .addOnFailureListener {
@@ -171,8 +178,6 @@ fun getReadableLocation(latitude: Double, longitude: Double, context: Context): 
     return addressText
 
 }
-
-
 
 
 private fun hasPermissions(context: Context): Boolean {

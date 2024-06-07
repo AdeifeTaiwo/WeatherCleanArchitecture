@@ -15,7 +15,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.weathercleanarchitecture.R
 import com.example.weathercleanarchitecture.presentation.component.AppSearchBar
 import com.example.weathercleanarchitecture.presentation.component.BlueBackgroundCheckButton
+import com.example.weathercleanarchitecture.utility.Resource
 import com.example.weathercleanarchitecture.utility.getReadableLocation
 import com.example.weathercleanarchitecture.utility.getUserLocation
 
@@ -41,28 +44,47 @@ fun HomeScreen(
 ) {
     val uiState = viewModel.uiState.value
     var getLocation by remember { mutableStateOf(false) }
-    var address by remember {
-        mutableStateOf("")
-    }
+    var address by remember { mutableStateOf("") }
     var showToast by remember {
         mutableStateOf(false)
     }
     val context = LocalContext.current;
+    var isLoading by remember { mutableStateOf(false) }
 
-    // LaunchedEffect(key1 = true, block = {
-    //viewModel.news.collect {
-    //  Log.d("TAP", it.toString())
-    //}
+    var long by remember { mutableDoubleStateOf(7.0) }
+    var lat by remember { mutableDoubleStateOf(7.0) }
 
-    getUserLocation()
+
     val latLng = getUserLocation()
-    address = getReadableLocation(
-        latLng.latitude,
-        latLng.longitude,
-        context
-    )
 
-    if (showToast){
+    LaunchedEffect(key1 = Unit, block = {
+        latLng.collect() { result ->
+            when (result) {
+                is Resource.Error -> {
+                    isLoading = false
+                }
+
+                is Resource.Loading -> {
+                    isLoading = true
+                }
+
+                is Resource.Success -> {
+                    address = getReadableLocation(
+                        result.data?.latitude ?: 70.0,
+                        result.data?.longitude ?: 32.0,
+                        context
+                    )
+                    isLoading = false
+                    long = result.data?.longitude ?: 32.0
+                    lat = result.data?.latitude ?: 70.0
+                }
+            }
+
+        }
+    })
+
+
+    if (showToast) {
         Toast.makeText(context, "Fetching location", Toast.LENGTH_SHORT).show()
         showToast = false
     }
@@ -131,11 +153,11 @@ fun HomeScreen(
                 BlueBackgroundCheckButton(
                     buttonText = "Check Forecast",
                     modifier = Modifier.weight(0.8f),
-                    enabled = true
+                    enabled = address.isNotEmpty(),
                 ) {
-                    if(address.isNotEmpty()) {
-                        navigateToWeatherDetails(latLng.latitude, latLng.longitude)
-                    }else {
+                    if (address.isNotEmpty()) {
+                        navigateToWeatherDetails(lat, long)
+                    } else {
                         showToast = true
                     }
                 }
